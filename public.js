@@ -5,7 +5,6 @@ function parsePassedData() {
     var urlParams = new URLSearchParams(window.location.search);
     var data = JSON.parse(decodeURI(urlParams.get("data")));
 
-    console.log(data);
     State.publicKey = data.publicKey;
     State.candidates = data.candidates;
 
@@ -58,7 +57,5 @@ function generateToken() {
     rsa.setPublic(State.publicKey.n, State.publicKey.e);
 
     var token = rsa.encrypt(tokenData);
-    console.log(token);
-
     document.getElementById("token").innerHTML = token;
 }

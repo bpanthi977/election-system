@@ -4,7 +4,6 @@ function generateKeys() {
     var rsa = new RSAKey();
     var e = "65537";
     rsa.generate(1024, e);
-    console.log(rsa);
     var public = {n: linebrk(rsa.n.toString(16), 64), e: e};
     document.getElementById("public-key").innerHTML = public.n;
     State.publicKey = public;
@@ -23,7 +22,6 @@ function generateLink() {
     // generate link to distribute. contains candidate list and public key.
     var publicData = {publicKey: State.publicKey, candidates: State.candidates};
     var link = "./public.html?data=" + encodeURI(JSON.stringify(publicData));
-    console.log(publicData);
     document.getElementById("public-link").innerHTML =
         '<a href="' + link + '">' + link + "</a>";
 }
@@ -111,8 +109,7 @@ function countVotes() {
 
     rows = titleRow;
     var maxVotes = votes.reduce((max, b) => Math.max(max, b.length), 0);
-    console.log(votes);
-    console.log(maxVotes);
+
     for (var i = 0; i < maxVotes; i++) {
         var tr = "<tr>";
         for (var j = 0; j < candidates.length; j++) {

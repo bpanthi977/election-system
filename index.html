@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>JavaScript RSA Cryptography Demo</title>
+  </head>
+
+<script language="JavaScript" type="text/javascript" src="jsbn/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="private.js"></script>
+
+<body>
+    <h1> Steps </h1>
+<ol>
+    <li> Generate keys <button onclick="generateKeys()"> Generate</button></li>
+    <li> Input candidate list </li>
+    <li> Distribute public key and candidate list </li>
+    <li> Collect tokens </li>
+    <li> Count votes </li>
+    <li> IMPORTANT: Close this tab </li>
+</ol>
+
+<div id="s1-public-key">
+    <hr>
+    <h2> Public key </h2>
+    <div id="public-key"> </div> 
+</div>
+
+<div id="s2-candidate-list">
+    <hr>
+    <h2> Candidates </h2>
+    <div id="candidates"> </div> <br/>
+    <input type="text" id="candidate-name" /> <button onclick="addCandidate()"> Add </button> 
+</div>
+
+<div id="s3-link">
+    <hr>
+    <h2> Public Link </h2>
+    <button onclick="generateLink()"> Generate Public Link </button>
+    <div id="public-link"></div>
+</div>
+
+<div id="s4-tokens">
+    <hr>
+    <h2> Tokens </h2>
+    <div id="tokens-list">
+    </div>
+    RollNumber: <input type="text" id="roll-number"> </input> <br>
+    Token: <input type="text" id="token"> </input> <br>
+    <button onclick="addToken()"> Add </button>
+</div>
+
+
+<div id="s5-count-votes">
+    <hr>
+    <h2> Voting Table </h2>
+    <button onclick="countVotes()"> Count Votes </button>
+    <div id="votes-table"></div>
+</div>
+
+<div id="workspace"> </div>
+</body>
+</html>
+    

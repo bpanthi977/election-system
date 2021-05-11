@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>JavaScript RSA Cryptography Demo</title>
+  </head>
+
+<script language="JavaScript" type="text/javascript" src="jsbn/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsbn/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="wordlist.js"></script>
+<script language="JavaScript" type="text/javascript" src="public.js"></script>
+
+<body onload="parsePassedData()">
+    <h1> Steps </h1>
+    <ol>
+	<li> Generate your keyword </li>
+	<li> Select your preferred candidate </li>
+	<li> Generate your token </li>
+	<li> Send your token </li>
+    </ol>
+
+    <div id="s1-keyword">
+	<hr>
+	<h2> Keyword </h2>
+	<input type="text" id="keyword" /> <button onClick="generateKeyword()"> Generate Random Keyword</button>
+    </div>
+
+    <div id="s2-candidate">
+	<hr>
+	<ol id="candidates-list">
+	</ol>
+	Selected Candidate: <span id="selected-candidate"></span>
+    </div>
+
+    <div id="s3-token">
+	<hr>
+	<button onclick="generateToken()"> Generate Token</button>
+	<br>
+	<div id="token"></div>
+    </div>
+
+    <div id="s4-send-token">
+	<hr>
+	<h2> Send your token </h2>
+    </div>
+
+</body>
+</html>

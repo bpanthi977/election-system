@@ -23,7 +23,7 @@ function generateLink() {
     var publicData = {publicKey: State.publicKey, candidates: State.candidates};
     var link = "./public.html?data=" + encodeURI(JSON.stringify(publicData));
     document.getElementById("public-link").innerHTML =
-        '<a href="' + link + '">' + link + "</a>";
+        '<a href="' + link + '"> Link for voting </a>';
 }
 
 function addToken() {

@@ -14,54 +14,63 @@
 
 <body>
     <h1> Steps </h1>
-<ol>
-    <li> Generate keys <button onclick="generateKeys()"> Generate</button></li>
-    <li> Input candidate list </li>
-    <li> Distribute public key and candidate list </li>
-    <li> Collect tokens </li>
-    <li> Count votes </li>
-    <li> IMPORTANT: Close this tab </li>
-</ol>
+    <ol>
+	<li>
+	    Generate keys <button onclick="generateKeys()"> Generate</button> 
+	    <div style="color:purple"> Make sure to generate new keys in everyone's presence.</div>
+	    <div style="color:purple"> After the election starts, the host should be sharing his/her screen till the end. If due to any discontinuity in internet or other events, the host goes offline, the election has to be repeated. </div> 
+	</li>
+	<li> Input candidate list </li>
+	<li> Select number of candidates to select (for 4th year only) </li>
+	<li> Distribute public key and candidate list </li>
+	<li> 
+	    Collect tokens 
+	    <div style="color:purple"> Be careful to copy and paste tokens correctly</div>
+	</li>
+	<li> Count votes </li>
+	<li style="color:purple"> IMPORTANT: Close this tab after the election, otherwise the host can later figureout who voted whom.</li>
+    </ol>
 
-<div id="s1-public-key">
-    <hr>
-    <h2> Public key </h2>
-    <div id="public-key"> </div> 
-</div>
-
-<div id="s2-candidate-list">
-    <hr>
-    <h2> Candidates </h2>
-    <div id="candidates"> </div> <br/>
-    <input type="text" id="candidate-name" /> <button onclick="addCandidate()"> Add </button> 
-</div>
-
-<div id="s3-link">
-    <hr>
-    <h2> Public Link </h2>
-    <button onclick="generateLink()"> Generate Public Link </button>
-    <div id="public-link"></div>
-</div>
-
-<div id="s4-tokens">
-    <hr>
-    <h2> Tokens </h2>
-    <div id="tokens-list">
+    <div id="s1-public-key">
+	<hr>
+	<h2> Public key </h2>
+	<div id="public-key"> </div> 
     </div>
-    RollNumber: <input type="text" id="roll-number"> </input> <br>
-    Token: <input type="text" id="token"> </input> <br>
-    <button onclick="addToken()"> Add </button>
-</div>
+
+    <div id="s2-candidate-list">
+	<hr>
+	<h2> Candidates </h2>
+	<div id="candidates"> </div> <br/>
+	<input type="text" id="candidate-name" /> <button onclick="addCandidate()"> Add </button>
+	<br> Fourth year election? (implies voters can select two candidates) : <input type="checkbox" id="fourth-year-candidates">
+    </div>
+
+    <div id="s3-link">
+	<hr>
+	<h2> Public Link </h2>
+	<button onclick="generateLink()"> Generate Public Link </button>
+	<div id="public-link"></div>
+    </div>
+
+    <div id="s4-tokens">
+	<hr>
+	<h2> Tokens </h2>
+	<div id="tokens-list">
+	</div>
+	RollNumber: <input type="text" id="roll-number"> </input> <br>
+	Token: <input type="text" id="token"> </input> <br>
+	<button onclick="addToken()"> Add </button>
+    </div>
 
 
-<div id="s5-count-votes">
-    <hr>
-    <h2> Voting Table </h2>
-    <button onclick="countVotes()"> Count Votes </button>
-    <div id="votes-table"></div>
-</div>
+    <div id="s5-count-votes">
+	<hr>
+	<h2> Voting Table </h2>
+	<button onclick="countVotes()"> Count Votes </button>
+	<div id="votes-table"></div>
+    </div>
 
-<div id="workspace"> </div>
+    <div id="workspace"> </div>
 </body>
 </html>
     

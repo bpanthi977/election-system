@@ -24,24 +24,36 @@
     <div id="s1-keyword">
 	<hr>
 	<h2> Keyword </h2>
-	<input type="text" id="keyword" /> <button onClick="generateKeyword()"> Generate Random Keyword</button>
+	<button onClick="generateKeyword()"> Generate Random Keyword</button>
+	<div id="keyword" />
     </div>
 
     <div id="s2-candidate">
 	<hr>
+	<h2> Candidate Selection </h2>
 	<ol id="candidates-list">
 	</ol>
 	Selected Candidate: <span id="selected-candidate"></span>
     </div>
 
-    <div id="s3-token">
+    <div id="s3-candidate2" hidden="true">
+	<hr>
+	<h3> Second candidate (optional) </h3>
+	<ol id="candidates-list2">
+	</ol>
+	Selected Second Candidate: <span id="selected-candidate2"> </span>
+    </div>
+    
+    <div id="s4-token">
 	<hr>
 	<button onclick="generateToken()"> Generate Token</button>
 	<br>
 	<div id="token"></div>
+	<hr>
+	<div id="clipboard-status"> </div>
     </div>
 
-    <div id="s4-send-token">
+    <div id="s5-send-token">
 	<hr>
 	<h2> Send your token </h2>
     </div>

@@ -20,7 +20,13 @@ function addCandidate() {
 
 function generateLink() {
     // generate link to distribute. contains candidate list and public key.
-    var publicData = {publicKey: State.publicKey, candidates: State.candidates};
+    var fourthYear = document.getElementById("fourth-year-candidates").checked;
+    State.fourthYear = fourthYear;
+    var publicData = {
+        publicKey: State.publicKey,
+        candidates: State.candidates,
+        fourthYear: fourthYear,
+    };
     var link = "./public.html?data=" + encodeURI(JSON.stringify(publicData));
     document.getElementById("public-link").innerHTML =
         '<a href="' + link + '"> Link for voting </a>';
@@ -46,6 +52,7 @@ function removeToken(id) {
 }
 
 function shuffle(array) {
+    if (array == null) return array;
     // Fisher-Yates Shuffle; from https://github.com/Daplie/knuth-shuffle/blob/master/index.js
     var currentIndex = array.length,
         temporaryValue,
@@ -63,6 +70,32 @@ function shuffle(array) {
     return array;
 }
 
+function validCandidate(candidate) {
+    return State.candidates.indexOf(candidate) != -1;
+}
+
+function isValidToken(token) {
+    if (token == null) {
+        return false;
+    }
+    if (!State.fourthYear) {
+        return validCandidate(token[1]);
+    } else {
+        var selections = token[1];
+        if (selections.length == 1) {
+            return validCandidate(selections[0]);
+        } else if (selections.length == 2) {
+            return (
+                selections[0] != selections[1] &&
+                validCandidate(selections[0]) &&
+                validCandidate(selections[1])
+            );
+        } else {
+            return false;
+        }
+    }
+}
+
 function decryptTokens() {
     // decrypt all tokens. show invalid tokens in red and return decrypted tokens
     // only when all tokens are valid
@@ -71,10 +104,7 @@ function decryptTokens() {
     for (var i = 0; i < list.children.length; i++) {
         var token = list.children[i].getAttribute("token");
         var decryptedToken = JSON.parse(State.rsa.decrypt(token));
-        if (
-            decryptedToken == null ||
-            State.candidates.indexOf(decryptedToken[1]) == -1
-        ) {
+        if (!isValidToken(decryptedToken)) {
             list.children[i].setAttribute("style", "color:red");
             decrypted = null;
             break;
@@ -93,11 +123,18 @@ function countVotes() {
 
     for (var i = 0; i < tokens.length; i++) {
         var keyword = tokens[i][0];
-        var candidate = tokens[i][1];
-
-        var candidateIndex = candidates.indexOf(candidate);
-
-        votes[candidateIndex].push(keyword);
+        var selection = tokens[i][1];
+        if (!State.fourthYear) {
+            var candidateIndex = candidates.indexOf(selection);
+            votes[candidateIndex].push(keyword);
+        } else {
+            var index1 = candidates.indexOf(selection[0]);
+            votes[index1].push(keyword);
+            if (selection.length == 2) {
+                var index2 = candidates.indexOf(selection[1]);
+                votes[index2].push(keyword);
+            }
+        }
     }
 
     var rows = "";

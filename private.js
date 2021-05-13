@@ -1,5 +1,11 @@
 var State = {candidates: []};
 
+function clearLink() {
+    document.getElementById("public-link").innerHTML = "";
+    document.getElementById("public-link-clipboard-status").innerHTML = "";
+    document.getElementById("tokens-list").innerHTML = "";
+}
+
 function generateKeys() {
     var rsa = new RSAKey();
     var e = "65537";
@@ -8,6 +14,7 @@ function generateKeys() {
     document.getElementById("public-key").innerHTML = public.n;
     State.publicKey = public;
     State.rsa = rsa;
+    clearLink();
 }
 
 function addCandidate() {
@@ -16,10 +23,17 @@ function addCandidate() {
     list.innerHTML += "<li>" + name.value + "</li>";
     State.candidates.push(name.value);
     name.value = "";
+    clearLink();
 }
 
 function generateLink() {
     // generate link to distribute. contains candidate list and public key.
+    if (State.publicKey == null) {
+        document.getElementById("public-link").innerText =
+            "Generate keys first!";
+        return;
+    }
+
     var fourthYear = document.getElementById("fourth-year-candidates").checked;
     State.fourthYear = fourthYear;
     var publicData = {
@@ -29,7 +43,17 @@ function generateLink() {
     };
     var link = "./public.html?data=" + encodeURI(JSON.stringify(publicData));
     document.getElementById("public-link").innerHTML =
-        '<a href="' + link + '"> Link for voting </a>';
+        '<a target="_blank" href="' + link + '"> Link for voting </a>';
+    navigator.clipboard.writeText(new URL(link, window.location).href).then(
+        function() {
+            document.getElementById("public-link-clipboard-status").innerText =
+                "Link copied to clipboard";
+        },
+        function() {
+            document.getElementById("public-link-clipboard-status").innerText =
+                "Please copy the token";
+        },
+    );
 }
 
 function addToken() {

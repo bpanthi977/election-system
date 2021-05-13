@@ -2,6 +2,7 @@ var State = {};
 function emptyToken() {
     // remove already genearated token when state changes
     document.getElementById("token").innerHTML = "";
+    document.getElementById("clipboard-status").innerHTML = "";
 }
 
 function showCandidateList(list, candidates, param) {

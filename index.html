@@ -42,7 +42,7 @@
 	<h2> Candidates </h2>
 	<div id="candidates"> </div> <br/>
 	<input type="text" id="candidate-name" /> <button onclick="addCandidate()"> Add </button>
-	<br> Fourth year election? (implies voters can select two candidates) : <input type="checkbox" id="fourth-year-candidates">
+	<br> Fourth year election? (implies voters can select two candidates) : <input type="checkbox" onclick="clearLink()" id="fourth-year-candidates">
     </div>
 
     <div id="s3-link">
@@ -50,6 +50,7 @@
 	<h2> Public Link </h2>
 	<button onclick="generateLink()"> Generate Public Link </button>
 	<div id="public-link"></div>
+	<div id="public-link-clipboard-status"></div>
     </div>
 
     <div id="s4-tokens">

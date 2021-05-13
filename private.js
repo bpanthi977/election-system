@@ -195,3 +195,13 @@ function countVotes() {
         "votes-table",
     ).innerHTML = `<table border='1'> ${rows} </table>`;
 }
+
+function flipCoin() {
+    let result = document.getElementById("coinflip-result");
+    let randFloat = Math.random();
+    if (randFloat >= 0.5) {
+        result.innerText = "Head";
+    } else {
+        result.innerText = "Tails";
+    }
+}

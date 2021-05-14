@@ -88,7 +88,8 @@ function generateToken() {
         var candidate2 = document.getElementById("selected-candidate2")
             .innerText;
         if (candidate2 == "") {
-            selection = [candidate1];
+            showError("Select second candidate");
+            return;
         } else if (candidate1 != candidate2) {
             selection = [candidate1, candidate2];
         } else {

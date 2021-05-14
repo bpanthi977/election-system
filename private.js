@@ -28,10 +28,8 @@ function isValidToken(token) {
     if (!State.fourthYear) {
         return validCandidate(token[1]);
     } else {
-        var selections = token[1];
-        if (selections.length == 1) {
-            return validCandidate(selections[0]);
-        } else if (selections.length == 2) {
+        var selections = [token[1][0], token[1][1]];
+        if (selections.length == 2) {
             return (
                 selections[0] != selections[1] &&
                 validCandidate(selections[0]) &&
@@ -183,10 +181,8 @@ function countVotes() {
         } else {
             var index1 = candidates.indexOf(selection[0]);
             votes[index1].push(keyword);
-            if (selection.length == 2) {
-                var index2 = candidates.indexOf(selection[1]);
-                votes[index2].push(keyword);
-            }
+            var index2 = candidates.indexOf(selection[1]);
+            votes[index2].push(keyword);
         }
     }
 
@@ -223,6 +219,9 @@ function countVotes() {
     document.getElementById(
         "votes-table",
     ).innerHTML = `<table border='1'> ${rows} </table>`;
+
+    document.getElementById("s7-final-message").innerHTML =
+        "<hr><h2> Remember to close this tab to maintain anonymity of votes.</h2>";
 }
 
 function flipCoin() {

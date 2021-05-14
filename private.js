@@ -17,11 +17,48 @@ function generateKeys() {
     clearLink();
 }
 
+function validCandidate(candidate) {
+    return State.candidates.indexOf(candidate) != -1;
+}
+
+function isValidToken(token) {
+    if (token == null) {
+        return false;
+    }
+    if (!State.fourthYear) {
+        return validCandidate(token[1]);
+    } else {
+        var selections = token[1];
+        if (selections.length == 1) {
+            return validCandidate(selections[0]);
+        } else if (selections.length == 2) {
+            return (
+                selections[0] != selections[1] &&
+                validCandidate(selections[0]) &&
+                validCandidate(selections[1])
+            );
+        } else {
+            return false;
+        }
+    }
+}
+
+function decrypt(tokenString) {
+    var decryptedToken = JSON.parse(State.rsa.decrypt(tokenString));
+    if (isValidToken(decryptedToken)) {
+        return decryptedToken;
+    } else {
+        return null;
+    }
+}
+
 function addCandidate() {
     var name = document.getElementById("candidate-name");
+    var value = name.value.replaceAll("'", "").replaceAll('"', "");
     var list = document.getElementById("candidates");
-    list.innerHTML += "<li>" + name.value + "</li>";
-    State.candidates.push(name.value);
+    list.innerHTML += "<li>" + value + "</li>";
+
+    State.candidates.push(value);
     name.value = "";
     clearLink();
 }
@@ -64,7 +101,11 @@ function addToken() {
 
     var count = list.children.length;
     var id = "token" + count;
-    list.innerHTML += `<div token="${token.value}" id="${id}"><br/> ${roll.value} : ${token.value} <button onClick="removeToken('${id}')"> Remove </button><div/>`;
+    let style = "style='color:black'";
+    if (decrypt(token.value) == null) {
+        style = "style='color:red'";
+    }
+    list.innerHTML += `<div ${style} token="${token.value}" id="${id}"><br/> ${roll.value} : ${token.value} <button onClick="removeToken('${id}')"> Remove </button><div/>`;
 
     roll.value = (parseInt(roll.value) + 1).toString();
     token.value = "";
@@ -94,29 +135,17 @@ function shuffle(array) {
     return array;
 }
 
-function validCandidate(candidate) {
-    return State.candidates.indexOf(candidate) != -1;
-}
-
-function isValidToken(token) {
-    if (token == null) {
-        return false;
+function checkTokenInput() {
+    var element = document.getElementById("token");
+    var token = element.value;
+    if (State.rsa == null) {
+        document.getElementById("token").value = "Generate Keys First!!";
+        return;
     }
-    if (!State.fourthYear) {
-        return validCandidate(token[1]);
+    if (decrypt(token) == null) {
+        element.setAttribute("style", "color:red");
     } else {
-        var selections = token[1];
-        if (selections.length == 1) {
-            return validCandidate(selections[0]);
-        } else if (selections.length == 2) {
-            return (
-                selections[0] != selections[1] &&
-                validCandidate(selections[0]) &&
-                validCandidate(selections[1])
-            );
-        } else {
-            return false;
-        }
+        element.setAttribute("style", "color:black");
     }
 }
 
@@ -127,8 +156,8 @@ function decryptTokens() {
     var list = document.getElementById("tokens-list");
     for (var i = 0; i < list.children.length; i++) {
         var token = list.children[i].getAttribute("token");
-        var decryptedToken = JSON.parse(State.rsa.decrypt(token));
-        if (!isValidToken(decryptedToken)) {
+        var decryptedToken = decrypt(token);
+        if (decryptedToken == null) {
             list.children[i].setAttribute("style", "color:red");
             decrypted = null;
             break;

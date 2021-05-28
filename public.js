@@ -1,4 +1,4 @@
-var State = {};
+let State = {};
 function emptyToken() {
     // remove already genearated token when state changes
     document.getElementById("token").innerHTML = "";
@@ -8,27 +8,27 @@ function emptyToken() {
 function showCandidateList(list, candidates, param) {
     list.innerHTML = "";
     console.log(list);
-    for (var i = 0; i < candidates.length; i++) {
-        var name = candidates[i];
+    for (let i = 0; i < candidates.length; i++) {
+        let name = candidates[i];
         list.innerHTML += `<li>${name} <button onclick="selectCandidate('${name}', ${param})"> Select </button>`;
     }
 }
 
 function parsePassedData() {
     // parses the data passed through URL. extracts public key and candidates list
-    var urlParams = new URLSearchParams(window.location.search);
-    var data = JSON.parse(decodeURI(urlParams.get("data")));
+    let urlParams = new URLSearchParams(window.location.search);
+    let data = JSON.parse(decodeURI(urlParams.get("data")));
 
     State.publicKey = data.publicKey;
     State.candidates = data.candidates;
     State.fourthYear = data.fourthYear;
 
-    var list = document.getElementById("candidates-list");
+    let list = document.getElementById("candidates-list");
     showCandidateList(list, State.candidates, 0);
 
     if (State.fourthYear) {
         // show second candidate list
-        var list = document.getElementById("candidates-list2");
+        let list = document.getElementById("candidates-list2");
         document.getElementById("s3-candidate2").hidden = false;
         showCandidateList(list, State.candidates, 1);
     }
@@ -47,12 +47,12 @@ function selectCandidate(name, order) {
 }
 
 function randomWord() {
-    var randInt = Math.floor(Math.random() * (wordList.length - 1));
+    let randInt = Math.floor(Math.random() * (wordList.length - 1));
     return wordList[randInt];
 }
 
 function generateKeyword() {
-    var keyword = document.getElementById("keyword");
+    let keyword = document.getElementById("keyword");
     keyword.innerText = randomWord() + "-" + randomWord() + "-" + randomWord();
     emptyToken();
 }
@@ -60,32 +60,32 @@ function generateKeyword() {
 function randomPassword() {
     const chars =
         "!@#$%^&*()_-+=?/.,<>0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    var password = "";
-    for (var i = 0; i < 16; i++) {
-        var randInt = Math.floor(Math.random() * chars.length);
+    let password = "";
+    for (let i = 0; i < 16; i++) {
+        let randInt = Math.floor(Math.random() * chars.length);
         password += chars[randInt];
     }
     return password;
 }
 
 function showError(string) {
-    var token = document.getElementById("token");
+    let token = document.getElementById("token");
     token.innerText = string;
     token.setAttribute("style", "color:red");
 }
 
 function generateToken() {
-    var keyword = document.getElementById("keyword").innerText;
-    var candidate1 = document.getElementById("selected-candidate").innerText;
+    let keyword = document.getElementById("keyword").innerText;
+    let candidate1 = document.getElementById("selected-candidate").innerText;
     if (candidate1 == "" || keyword == "") {
         showError("Make sure to select a candidate");
         return;
     }
-    var selection;
+    let selection;
     if (!State.fourthYear) {
         selection = candidate1;
     } else {
-        var candidate2 = document.getElementById("selected-candidate2")
+        let candidate2 = document.getElementById("selected-candidate2")
             .innerText;
         if (candidate2 == "") {
             showError("Select second candidate");
@@ -98,15 +98,15 @@ function generateToken() {
         }
     }
 
-    var random = randomPassword();
+    let random = randomPassword();
 
-    var tokenData = JSON.stringify([keyword, selection, random]);
+    let tokenData = JSON.stringify([keyword, selection, random]);
 
-    var rsa = new RSAKey();
+    let rsa = new RSAKey();
     rsa.setPublic(State.publicKey.n, State.publicKey.e);
 
-    var token = rsa.encrypt(tokenData);
-    var tokenElement = document.getElementById("token");
+    let token = rsa.encrypt(tokenData);
+    let tokenElement = document.getElementById("token");
     tokenElement.innerHTML = token;
     tokenElement.setAttribute("style", "color:black");
     navigator.clipboard.writeText(token).then(
@@ -120,7 +120,7 @@ function generateToken() {
         },
     );
 
-    // var inputField = document.getElementById("hidden-token");
+    // let inputField = document.getElementById("hidden-token");
     // inputField.value = token;
     // inputField.select();
     // document.execCommand("copy");

@@ -1,4 +1,4 @@
-var State = {candidates: []};
+let State = {candidates: []};
 
 function clearLink() {
     document.getElementById("public-link").innerHTML = "";
@@ -7,10 +7,10 @@ function clearLink() {
 }
 
 function generateKeys() {
-    var rsa = new RSAKey();
-    var e = "65537";
+    let rsa = new RSAKey();
+    let e = "65537";
     rsa.generate(1024, e);
-    var public = {n: linebrk(rsa.n.toString(16), 64), e: e};
+    let public = {n: linebrk(rsa.n.toString(16), 64), e: e};
     document.getElementById("public-key").innerHTML = public.n;
     State.publicKey = public;
     State.rsa = rsa;
@@ -28,7 +28,7 @@ function isValidToken(token) {
     if (!State.fourthYear) {
         return validCandidate(token[1]);
     } else {
-        var selections = [token[1][0], token[1][1]];
+        let selections = [token[1][0], token[1][1]];
         if (selections.length == 2) {
             return (
                 selections[0] != selections[1] &&
@@ -42,7 +42,7 @@ function isValidToken(token) {
 }
 
 function decrypt(tokenString) {
-    var decryptedToken = JSON.parse(State.rsa.decrypt(tokenString));
+    let decryptedToken = JSON.parse(State.rsa.decrypt(tokenString));
     if (isValidToken(decryptedToken)) {
         return decryptedToken;
     } else {
@@ -51,9 +51,9 @@ function decrypt(tokenString) {
 }
 
 function addCandidate() {
-    var name = document.getElementById("candidate-name");
-    var value = name.value.replaceAll("'", "").replaceAll('"', "");
-    var list = document.getElementById("candidates");
+    let name = document.getElementById("candidate-name");
+    let value = name.value.replaceAll("'", "").replaceAll('"', "");
+    let list = document.getElementById("candidates");
     list.innerHTML += "<li>" + value + "</li>";
 
     State.candidates.push(value);
@@ -69,14 +69,14 @@ function generateLink() {
         return;
     }
 
-    var fourthYear = document.getElementById("fourth-year-candidates").checked;
+    let fourthYear = document.getElementById("fourth-year-candidates").checked;
     State.fourthYear = fourthYear;
-    var publicData = {
+    let publicData = {
         publicKey: State.publicKey,
         candidates: State.candidates,
         fourthYear: fourthYear,
     };
-    var link = "./public.html?data=" + encodeURI(JSON.stringify(publicData));
+    let link = "./public.html?data=" + encodeURI(JSON.stringify(publicData));
     document.getElementById("public-link").innerHTML =
         '<a target="_blank" href="' + link + '"> Link for voting </a>';
     navigator.clipboard.writeText(new URL(link, window.location).href).then(
@@ -93,12 +93,12 @@ function generateLink() {
 
 function addToken() {
     // add a token to tokens list, and increment roll number
-    var roll = document.getElementById("roll-number");
-    var token = document.getElementById("token");
-    var list = document.getElementById("tokens-list");
+    let roll = document.getElementById("roll-number");
+    let token = document.getElementById("token");
+    let list = document.getElementById("tokens-list");
 
-    var count = list.children.length;
-    var id = "token" + count;
+    let count = list.children.length;
+    let id = "token" + count;
     let style = "style='color:black'";
     if (decrypt(token.value) == null) {
         style = "style='color:red'";
@@ -117,7 +117,7 @@ function removeToken(id) {
 function shuffle(array) {
     if (array == null) return array;
     // Fisher-Yates Shuffle; from https://github.com/Daplie/knuth-shuffle/blob/master/index.js
-    var currentIndex = array.length,
+    let currentIndex = array.length,
         temporaryValue,
         randomIndex;
 
@@ -134,8 +134,8 @@ function shuffle(array) {
 }
 
 function checkTokenInput() {
-    var element = document.getElementById("token");
-    var token = element.value;
+    let element = document.getElementById("token");
+    let token = element.value;
     if (State.rsa == null) {
         document.getElementById("token").value = "Generate Keys First!!";
         return;
@@ -150,11 +150,11 @@ function checkTokenInput() {
 function decryptTokens() {
     // decrypt all tokens. show invalid tokens in red and return decrypted tokens
     // only when all tokens are valid
-    var decrypted = [];
-    var list = document.getElementById("tokens-list");
-    for (var i = 0; i < list.children.length; i++) {
-        var token = list.children[i].getAttribute("token");
-        var decryptedToken = decrypt(token);
+    let decrypted = [];
+    let list = document.getElementById("tokens-list");
+    for (let i = 0; i < list.children.length; i++) {
+        let token = list.children[i].getAttribute("token");
+        let decryptedToken = decrypt(token);
         if (decryptedToken == null) {
             list.children[i].setAttribute("style", "color:red");
             decrypted = null;
@@ -168,37 +168,37 @@ function decryptTokens() {
 }
 
 function countVotes() {
-    var candidates = State.candidates;
-    var tokens = decryptTokens();
-    var votes = candidates.map(x => []);
+    let candidates = State.candidates;
+    let tokens = decryptTokens();
+    let votes = candidates.map(x => []);
 
-    for (var i = 0; i < tokens.length; i++) {
-        var keyword = tokens[i][0];
-        var selection = tokens[i][1];
+    for (let i = 0; i < tokens.length; i++) {
+        let keyword = tokens[i][0];
+        let selection = tokens[i][1];
         if (!State.fourthYear) {
-            var candidateIndex = candidates.indexOf(selection);
+            let candidateIndex = candidates.indexOf(selection);
             votes[candidateIndex].push(keyword);
         } else {
-            var index1 = candidates.indexOf(selection[0]);
+            let index1 = candidates.indexOf(selection[0]);
             votes[index1].push(keyword);
-            var index2 = candidates.indexOf(selection[1]);
+            let index2 = candidates.indexOf(selection[1]);
             votes[index2].push(keyword);
         }
     }
 
-    var rows = "";
-    var titleRow = "<tr>";
-    for (var j = 0; j < candidates.length; j++) {
+    let rows = "";
+    let titleRow = "<tr>";
+    for (let j = 0; j < candidates.length; j++) {
         titleRow += `<th> ${candidates[j]} </th>`;
     }
     titleRow += "</tr>";
 
     rows = titleRow;
-    var maxVotes = votes.reduce((max, b) => Math.max(max, b.length), 0);
+    let maxVotes = votes.reduce((max, b) => Math.max(max, b.length), 0);
 
-    for (var i = 0; i < maxVotes; i++) {
-        var tr = "<tr>";
-        for (var j = 0; j < candidates.length; j++) {
+    for (let i = 0; i < maxVotes; i++) {
+        let tr = "<tr>";
+        for (let j = 0; j < candidates.length; j++) {
             if (votes[j][i] != null) {
                 tr += `<td> ${votes[j][i]} </td>`;
             } else {
@@ -209,8 +209,8 @@ function countVotes() {
         rows += tr;
     }
 
-    var resultRow = "<tr>";
-    for (var j = 0; j < candidates.length; j++) {
+    let resultRow = "<tr>";
+    for (let j = 0; j < candidates.length; j++) {
         resultRow += `<td> ${votes[j].length} </td>`;
     }
     resultRow += "</tr>";

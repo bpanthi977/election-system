@@ -10,7 +10,7 @@ function showCandidateList(list, candidates, param) {
     console.log(list);
     for (let i = 0; i < candidates.length; i++) {
         let name = candidates[i];
-        list.innerHTML += `<li>${name} <button onclick="selectCandidate('${name}', ${param})"> Select </button>`;
+        list.innerHTML += `<li>${name} <input type="checkbox" onclick="selectCandidate(this, '${name}', ${param}, ${i})"></li>`;
     }
 }
 
@@ -21,27 +21,38 @@ function parsePassedData() {
 
     State.publicKey = data.publicKey;
     State.candidates = data.candidates;
-    State.fourthYear = data.fourthYear;
+    State.categories = data.categories;
+    State.choices = data.choices;
+    State.selections = State.categories.map(c => {
+        return [];
+    });
 
-    let list = document.getElementById("candidates-list");
-    showCandidateList(list, State.candidates, 0);
-
-    if (State.fourthYear) {
-        // show second candidate list
-        let list = document.getElementById("candidates-list2");
-        document.getElementById("s3-candidate2").hidden = false;
-        showCandidateList(list, State.candidates, 1);
-    }
+    let n = 0;
+    State.candidates.map(c => {
+        let id = "candidates-list-" + n;
+        document.getElementById(
+            "candidates-list",
+        ).innerHTML += `<h3> ${State.categories[n]} (Select ${State.choices[n]}) </h3> <ol id="${id}"> </ol>`;
+        let list = document.getElementById(id);
+        showCandidateList(list, c, n);
+        n++;
+    });
 
     // voters may forget to generate keyword
     generateKeyword();
 }
 
-function selectCandidate(name, order) {
-    if (order == 0) {
-        document.getElementById("selected-candidate").innerHTML = name;
-    } else if (order == 1) {
-        document.getElementById("selected-candidate2").innerHTML = name;
+function selectCandidate(target, name, category, n) {
+    let previous = State.selections;
+    if (target.checked) {
+        if (State.selections[category].length >= State.choices[category]) {
+            target.checked = false;
+            return;
+        }
+        State.selections[category].push(name);
+    } else {
+        let index = State.selections[category].indexOf(name);
+        State.selections[category].splice(index, 1);
     }
     emptyToken();
 }
@@ -76,31 +87,21 @@ function showError(string) {
 
 function generateToken() {
     let keyword = document.getElementById("keyword").innerText;
-    let candidate1 = document.getElementById("selected-candidate").innerText;
-    if (candidate1 == "" || keyword == "") {
-        showError("Make sure to select a candidate");
-        return;
-    }
-    let selection;
-    if (!State.fourthYear) {
-        selection = candidate1;
-    } else {
-        let candidate2 = document.getElementById("selected-candidate2")
-            .innerText;
-        if (candidate2 == "") {
-            showError("Select second candidate");
-            return;
-        } else if (candidate1 != candidate2) {
-            selection = [candidate1, candidate2];
-        } else {
-            showError("Select different candidates");
+
+    for (let n = 0; n < State.categories.length; n++) {
+        let selection = State.selections[n];
+        let category = State.categories[n];
+        let nChoices = State.choices[n];
+
+        if (selection.length != nChoices) {
+            showError(`Number of choices for ${category} invalid`);
             return;
         }
     }
 
     let random = randomPassword();
 
-    let tokenData = JSON.stringify([keyword, selection, random]);
+    let tokenData = JSON.stringify([keyword, State.selections, random]);
 
     let rsa = new RSAKey();
     rsa.setPublic(State.publicKey.n, State.publicKey.e);

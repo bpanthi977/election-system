@@ -10,6 +10,7 @@
 <script language="JavaScript" type="text/javascript" src="jsbn/rng.js"></script>
 <script language="JavaScript" type="text/javascript" src="jsbn/rsa.js"></script>
 <script language="JavaScript" type="text/javascript" src="jsbn/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="committee.js"></script>
 <script language="JavaScript" type="text/javascript" src="private.js"></script>
 
 <body>
@@ -40,9 +41,9 @@
     <div id="s2-candidate-list">
 	<hr>
 	<h2> Candidates </h2>
-	<div id="candidates"> </div> <br/>
-	<input type="text" id="candidate-name" /> <button onclick="addCandidate()"> Add </button>
-	<br> Fourth year election? (implies voters can select two candidates) : <input type="checkbox" onclick="clearLink()" id="fourth-year-candidates">
+	<div id="candidates0"> </div> <br/>
+	<input type="text" id="candidate-name-0" /> <button onclick="addCandidate(0)"> Add </button>
+	<br> Fourth year election? (implies voters can select two candidates) : <input type="checkbox" onclick="clearLink(); fourthYearChoice(this)">
     </div>
 
     <div id="s3-link">

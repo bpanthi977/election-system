@@ -34,16 +34,10 @@ function isValidToken(token) {
     for (let n = 0; n < State.categories.length; n++) {
         let selection = selections[n];
         if (selection.length != State.choices[n]) {
-            console.log("length mismatch");
             return false;
         }
         for (let j = 0; j < selection.length; j++) {
             let c = selection[j];
-            if (!validCandidate(c, n)) {
-                console.log("invalid candidate " + c + "," + n);
-            } else if (!onlyOnce(c, selection)) {
-                console.log("duplicated " + c);
-            }
             if (!validCandidate(c, n) || !onlyOnce(c, selection)) return false;
         }
     }
@@ -216,7 +210,6 @@ function countVotes() {
         for (let n = 0; n < State.categories.length; n++) {
             for (let j = 0; j < selection[n].length; j++) {
                 let candidateIndex = candidates[n].indexOf(selection[n][j]);
-                console.log([n, j, selection[n][j], candidateIndex]);
                 votes[n][candidateIndex].push(keyword);
             }
         }
